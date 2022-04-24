@@ -15,15 +15,15 @@ struct User{
     passwd:String,
     nick:String,
     status:UserStatus,
-    upload_traffic:Option<i128>,
-    download_traffic:Option<i128>,
-    traffic_total:Option<i128>,
+    upload_traffic:Option<String>,
+    download_traffic:Option<String>,
+    traffic_total:Option<String>,
 }
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct Server{
     address: Option<String>,
-    port: u32,
+    manage_port: u32,
 }
 
 #[derive(Deserialize)]
@@ -36,8 +36,9 @@ enum UserStatus{
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct Conf{
-    server_info: Option<Vec<Server>>,
-    user_info: Option<Vec<User>>
+    address: String,
+    manage_port: u32,
+    //users: User,
 }
 
 fn main() {
@@ -64,7 +65,6 @@ fn handle_user_scale() -> Option<u8>{
         Ok(f) => f,
         Err(e) => panic!("config file: {} not found. exception: {}"
             ,file_path, e),
-
     };
 
     let mut config_cache = String::new();
@@ -73,6 +73,10 @@ fn handle_user_scale() -> Option<u8>{
         Ok(s) => s,
         Err(e) => {panic!("error reading file ")},
     };
+    //println!("{}",&config_cache);
+    let config : Conf = toml::from_str(&config_cache).unwrap();
+    println!("{:?}",config.address);
+    assert_eq!(config.address, "127.0.0.1");
     Some(0)
 }
 

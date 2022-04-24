@@ -1,4 +1,3 @@
-[server_info]
 address = "127.0.0.1"
 manage_port = 10000
 
@@ -9,3 +8,6 @@ hash = ""
 passwd = "Hvxlyctdytxxfg"
 nick = "me"
 status = ""
+upload_traffic = ""
+download_traffic = ""
+traffic_total = ""
