@@ -1,0 +1,11 @@
+[server_info]
+address = "127.0.0.1"
+manage_port = 10000
+
+[users]
+
+[users.me]
+hash = ""
+passwd = "Hvxlyctdytxxfg"
+nick = "me"
+status = ""
