@@ -11,14 +11,21 @@ use toml::Value::String as tomlString;
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct User{
+   me: Me,
+}
+
+#[derive(Deserialize)]
+#[derive(Debug)]
+struct Me{
     hash:String,
     passwd:String,
     nick:String,
-    status:UserStatus,
+    //status:UserStatus,
     upload_traffic:Option<String>,
     download_traffic:Option<String>,
     traffic_total:Option<String>,
 }
+
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct Server{
@@ -38,7 +45,7 @@ enum UserStatus{
 struct Conf{
     address: String,
     manage_port: u32,
-    //users: User,
+    users: User,
 }
 
 fn main() {
@@ -75,7 +82,7 @@ fn handle_user_scale() -> Option<u8>{
     };
     //println!("{}",&config_cache);
     let config : Conf = toml::from_str(&config_cache).unwrap();
-    println!("{:?}",config.address);
+    println!("{:?} {:?}",config.address, config.users.me.passwd);
     assert_eq!(config.address, "127.0.0.1");
     Some(0)
 }
