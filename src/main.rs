@@ -66,14 +66,21 @@ fn read_user_list_by_api() {
 
     let n = user_hash_list_raw.replace("\"","");
 
-    let user_hash_list:Vec<&str> = n.split("\n").collect();
+    let user_hash_list_from_api:Vec<&str> = n.split("\n").collect();
 
     //println!("{}",user_hash_list[0]);
     let i = handle_config_file().users;
+    for per_user_hash in user_hash_list_from_api{
+        for (user, inner) in i.iter(){
+            if per_user_hash.to_string() == inner.hash{
+                println!("TRUE  {:?} {:?}", per_user_hash, inner.hash);
 
-    for (user, inner) in i.iter(){
-        println!("{:#?}",inner.hash)
+            }
+        }
     }
+
+
+
 
     //println!("{:#?}", i.iter());
 
