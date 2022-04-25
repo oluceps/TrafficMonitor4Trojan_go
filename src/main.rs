@@ -3,6 +3,7 @@
 extern crate core;
 
 use std::{process::Command, io, fs::File,string::String};
+use std::collections::HashMap;
 use std::io::Read;
 use toml;
 use serde_derive::Deserialize;
@@ -11,12 +12,7 @@ use toml::Value::String as tomlString;
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct User{
-   me: Me,
-}
 
-#[derive(Deserialize)]
-#[derive(Debug)]
-struct Me{
     hash:String,
     passwd:String,
     nick:String,
@@ -24,7 +20,9 @@ struct Me{
     upload_traffic:Option<String>,
     download_traffic:Option<String>,
     traffic_total:Option<String>,
+
 }
+
 
 #[derive(Deserialize)]
 #[derive(Debug)]
@@ -45,7 +43,7 @@ enum UserStatus{
 struct Conf{
     address: String,
     manage_port: u32,
-    users: User,
+    users: HashMap<String,User>,
 }
 
 fn main() {
@@ -82,7 +80,8 @@ fn handle_user_scale() -> Option<u8>{
     };
     //println!("{}",&config_cache);
     let config : Conf = toml::from_str(&config_cache).unwrap();
-    println!("{:?} {:?}",config.address, config.users.me.passwd);
+
+    println!("{:?} {:?}",config.address, config.users.get("me").unwrap().passwd);
     assert_eq!(config.address, "127.0.0.1");
     Some(0)
 }
