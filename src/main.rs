@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::io::Read;
 use toml;
 use serde_derive::{Deserialize,Serialize};
-use toml::Value::{String as tomlString, String};
+use toml::Value::String as tomlString;
 
 #[derive(Deserialize,Serialize,Debug)]
 struct User{
@@ -69,9 +69,16 @@ fn read_user_list_by_api() {
 
     //println!("{}",user_hash_list[0]);
     let i = handle_config_file().users;
+    let mut vec_user_hash: Vec<String> = Vec::new();
+
+
+    for (user,inner) in i.iter(){
+        vec_user_hash.push(inner.hash.to_string())
+    }
+
     for per_user_hash in user_hash_list_from_api{
         for (user, inner) in i.iter(){
-            if per_user_hash.to_string() == inner.hash{
+            if per_user_hash.to_string() != inner.hash{
                 println!("TRUE  {:?} {:?}", per_user_hash, inner.hash);
 
             }
@@ -104,8 +111,6 @@ enum UserAd{
 fn handle_user(user: User, han:UserAd){
     let config = load_config_file();
     let mut to_add = String::new();
-
-
 
 }
 
