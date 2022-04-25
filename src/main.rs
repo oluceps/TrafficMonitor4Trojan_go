@@ -1,8 +1,9 @@
 #![allow(unused)]
-
 extern crate core;
 
 use std::{process::Command, io, fs::File,string::String};
+use std::alloc::handle_alloc_error;
+use std::collections::hash_map::Keys;
 use std::collections::HashMap;
 use std::io::Read;
 use toml;
@@ -59,21 +60,28 @@ fn read_user_list_by_api() {
         .expect("Execute Error");
 
     let mut out = String::from_utf8(output.stdout).unwrap();
-    let test_str: Vec<&str> = "\"1d6501dd05789331c94a765b0e1e2682d95ec06d8fd4c91703214b44\"
+    let mut user_hash_list_raw = "\"1d6501dd05789331c94a765b0e1e2682d95ec06d8fd4c91703214b44\"
 \"36417c02cab12df31a6c93c74b80a8bf485f90098c1b2ddb1a35367a\"
-\"0e96722be6e675d749640634b35d0c6e6e7ee22232e927676afc2837\"".split("\n").collect();
-    for line in test_str{
+\"0e96722be6e675d749640634b35d0c6e6e7ee22232e927676afc2837\"".to_string().replace("\"","");
 
-        println!("{}",line.replace("\"", ""));
+    let n = user_hash_list_raw.replace("\"","");
+
+    let user_hash_list:Vec<&str> = n.split("\n").collect();
+
+    //println!("{}",user_hash_list[0]);
+    let i = handle_config_file().users;
+
+    for (user, inner) in i.iter(){
+        println!("{:#?}",inner.hash)
     }
 
-
-
+    //println!("{:#?}", i.iter());
 
 
 }
 
-fn handle_config_file() -> Option<Conf>{
+
+fn handle_config_file() ->  Conf {
     use std::string::String;
     let file_path : &str = "/home/rito/Engineering/\
     TrafficMonitor4Trojan_go/config.toml";
@@ -95,6 +103,6 @@ fn handle_config_file() -> Option<Conf>{
     //println!("{}",&config_cache);
     let config : Conf = toml::from_str(&config_cache).unwrap();
 
-    Some(config)
+    config
 }
 
