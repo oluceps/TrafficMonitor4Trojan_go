@@ -7,11 +7,10 @@ use std::collections::hash_map::Keys;
 use std::collections::HashMap;
 use std::io::Read;
 use toml;
-use serde_derive::Deserialize;
-use toml::Value::String as tomlString;
+use serde_derive::{Deserialize,Serialize};
+use toml::Value::{String as tomlString, String};
 
-#[derive(Deserialize)]
-#[derive(Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 struct User{
 
     hash: String,
@@ -25,22 +24,22 @@ struct User{
 }
 
 
-#[derive(Deserialize)]
-#[derive(Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 struct Server{
     address: Option<String>,
     manage_port: u32,
 }
 
-#[derive(Deserialize)]
-#[derive(Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 enum UserStatus{
     Online,
     Offline{ last_login :String},
     NotExist,
 }
-#[derive(Deserialize)]
-#[derive(Debug)]
+
+
+
+#[derive(Deserialize,Serialize,Debug)]
 struct Conf{
     address: String,
     manage_port: u32,
@@ -81,25 +80,38 @@ fn read_user_list_by_api() {
 
 
 
-
-    //println!("{:#?}", i.iter());
-
-
 }
-
-
-fn handle_config_file() ->  Conf {
+fn load_config_file() -> File {
     use std::string::String;
     let file_path : &str = "/home/rito/Engineering/\
     TrafficMonitor4Trojan_go/config.toml";
 
-    let mut config = match File::open(file_path) {
+    let config = match File::open(file_path) {
         Ok(f) => f,
         Err(e) => panic!("config file: {} not found. exception: {}"
-            ,file_path, e),
+                         ,file_path, e),
     };
 
+    config
+}
 
+
+enum UserAd{
+    Add,
+    Del,
+}
+
+fn handle_user(user: User, han:UserAd){
+    let config = load_config_file();
+    let mut to_add = String::new();
+
+
+
+}
+
+fn handle_config_file() ->  Conf {
+
+    let mut config = load_config_file();
 
     let mut config_cache = String::new();
 
