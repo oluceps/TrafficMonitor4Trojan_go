@@ -13,13 +13,13 @@ use toml::Value::String as tomlString;
 #[derive(Debug)]
 struct User{
 
-    hash:String,
-    passwd:String,
-    nick:String,
+    hash: String,
+    passwd: Option<String>,
+    nick: Option<String>,
     //status:UserStatus,
-    upload_traffic:Option<String>,
-    download_traffic:Option<String>,
-    traffic_total:Option<String>,
+    upload_traffic: Option<String>,
+    download_traffic: Option<String>,
+    traffic_total: Option<String>,
 
 }
 
@@ -47,30 +47,44 @@ struct Conf{
 }
 
 fn main() {
-    handle_user_scale();
+    handle_config_file();
+    read_user_list_by_api();
 }
 
 
-fn ls() {
-    use std::string::String;
+fn read_user_list_by_api() {
+    //./trojan-go -api-addr 127.0.0.1:10000 -api list | jq .[].status.user.hash
     let output = Command::new("ls")
         .output()
         .expect("Execute Error");
 
-    let out = String::from_utf8(output.stdout).unwrap();
+    let mut out = String::from_utf8(output.stdout).unwrap();
+    let test_str: Vec<&str> = "\"1d6501dd05789331c94a765b0e1e2682d95ec06d8fd4c91703214b44\"
+\"36417c02cab12df31a6c93c74b80a8bf485f90098c1b2ddb1a35367a\"
+\"0e96722be6e675d749640634b35d0c6e6e7ee22232e927676afc2837\"".split("\n").collect();
+    for line in test_str{
 
-    println!("{}", out);
+        println!("{}",line.replace("\"", ""));
+    }
+
+
+
+
+
 }
 
-fn handle_user_scale() -> Option<u8>{
+fn handle_config_file() -> Option<Conf>{
     use std::string::String;
     let file_path : &str = "/home/rito/Engineering/\
     TrafficMonitor4Trojan_go/config.toml";
+
     let mut config = match File::open(file_path) {
         Ok(f) => f,
         Err(e) => panic!("config file: {} not found. exception: {}"
             ,file_path, e),
     };
+
+
 
     let mut config_cache = String::new();
 
@@ -81,18 +95,6 @@ fn handle_user_scale() -> Option<u8>{
     //println!("{}",&config_cache);
     let config : Conf = toml::from_str(&config_cache).unwrap();
 
-    println!("{:?} {:?}",config.address, config.users.get("me").unwrap().passwd);
-    assert_eq!(config.address, "127.0.0.1");
-    Some(0)
-}
-
-//return the password of user
-fn select_user<'a>() -> &'a str{
-    use std::string::String;
-    let mut usrinput = String::new();
-    io::stdin().read_line(&mut usrinput)
-        .expect("input arg error");
-    let judge :u8 = usrinput.trim().parse().unwrap();
-    "t"
+    Some(config)
 }
 
