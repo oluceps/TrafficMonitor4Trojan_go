@@ -77,12 +77,10 @@ fn read_user_list_by_api() {
     }
 
     for per_user_hash in user_hash_list_from_api{
-        for (user, inner) in i.iter(){
-            if per_user_hash.to_string() != inner.hash{
-                println!("TRUE  {:?} {:?}", per_user_hash, inner.hash);
-
-            }
+        if vec_user_hash.contains(&per_user_hash.to_string()){
+            println!("contain {:?}", per_user_hash);
         }
+
     }
 
 
