@@ -1,50 +1,16 @@
 #![allow(unused)]
+
 extern crate core;
 
+use traffic_monitor4_trojan_go::config_struct::config_file_def::*;
 use std::{process::Command, io, fs::File,string::String};
 use std::alloc::handle_alloc_error;
 use std::collections::hash_map::Keys;
 use std::collections::HashMap;
 use std::io::Read;
 use toml;
-use serde_derive::{Deserialize,Serialize};
+
 use toml::Value::String as tomlString;
-
-#[derive(Deserialize,Serialize,Debug)]
-struct User{
-
-    hash: String,
-    passwd: Option<String>,
-    nick: Option<String>,
-    //status:UserStatus,
-    upload_traffic: Option<String>,
-    download_traffic: Option<String>,
-    traffic_total: Option<String>,
-
-}
-
-
-#[derive(Deserialize,Serialize,Debug)]
-struct Server{
-    address: Option<String>,
-    manage_port: u32,
-}
-
-#[derive(Deserialize,Serialize,Debug)]
-enum UserStatus{
-    Online,
-    Offline{ last_login :String},
-    NotExist,
-}
-
-
-
-#[derive(Deserialize,Serialize,Debug)]
-struct Conf{
-    address: String,
-    manage_port: u32,
-    users: HashMap<String,User>,
-}
 
 fn main() {
     handle_config_file();

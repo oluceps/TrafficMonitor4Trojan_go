@@ -1,5 +1,5 @@
 [package]
-name = "TrafficMonitor4Trojan_go"
+name = "traffic_monitor4_trojan_go"
 version = "0.1.0"
 edition = "2021"
 

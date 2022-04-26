@@ -4,7 +4,7 @@ manage_port = 10000
 [users]
 
 [users.me]
-hash = "d6501dd05789331c94a765b0e1e2682d95ec06d8fd4c91703214b44"
+hash = "1d6501dd05789331c94a765b0e1e2682d95ec06d8fd4c91703214b44"
 status = ""
 upload_traffic = ""
 download_traffic = ""
