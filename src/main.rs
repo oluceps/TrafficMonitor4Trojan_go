@@ -4,7 +4,6 @@ extern crate core;
 
 use traffic_monitor4_trojan_go::config_struct::config_file_def::*;
 use std::{process::Command, io, fs::File,string::String};
-use std::alloc::handle_alloc_error;
 use std::collections::hash_map::Keys;
 use std::collections::HashMap;
 use std::io::Read;
@@ -31,10 +30,11 @@ fn read_user_list_by_api() {
 
     let n = user_hash_list_raw.replace("\"","");
 
-    let user_hash_list_from_api:Vec<&str> = n.split("\n").collect();
+    let mut user_hash_list_from_api:Vec<&str> = n.split("\n").collect();
 
     //println!("{}",user_hash_list[0]);
     let i = handle_config_file().users;
+
     let mut vec_user_hash: Vec<String> = Vec::new();
 
 
@@ -42,12 +42,22 @@ fn read_user_list_by_api() {
         vec_user_hash.push(inner.hash.to_string())
     }
 
-    for per_user_hash in user_hash_list_from_api{
-        if vec_user_hash.contains(&per_user_hash.to_string()){
-            println!("contain {:?}", per_user_hash);
+    for per_user_hash_from_api in user_hash_list_from_api.iter(){
+        if vec_user_hash.contains(&per_user_hash_from_api.to_string()){
+            println!("api_person in file : {:?}", per_user_hash_from_api);
         }
-
     }
+    let mut file_not_contain:Vec<&str>;
+
+    for per_usr_from_file in vec_user_hash.iter(){
+        let processed: &str = per_usr_from_file.as_str();
+        if !user_hash_list_from_api.contains(&processed){
+            println!("file person not in api : {:?}", processed);
+        }
+    }
+    //println!("read from file uncontain load from api: {:?}", aa);
+
+
 
 
 
@@ -62,7 +72,6 @@ fn load_config_file() -> File {
         Err(e) => panic!("config file: {} not found. exception: {}"
                          ,file_path, e),
     };
-
     config
 }
 
@@ -72,7 +81,10 @@ enum UserAd{
     Del,
 }
 
-fn handle_user(user: User, han:UserAd){
+fn handle_user<T>(stats: &T){
+    match stats {
+        &_ => {}
+    }
     let config = load_config_file();
     let mut to_add = String::new();
 
